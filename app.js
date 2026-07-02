@@ -1,29 +1,43 @@
 // El principal objetivo de este desafío es fortalecer tus habilidades en lógica de programación. Aquí deberás desarrollar la lógica para resolver el problema
-
 // Crear variable amigos
 let amigos = [];
 
-// Función para agregar el amigo secreto utilizando document.getElementById
+// Función para agregar el amigo secreto
 function agregarAmigo() {
-    const amigoInput = document.getElementById("amigo");  // Corregir el uso del ID
-    const amigo = amigoInput.value.trim();  // Usar .value en lugar de ariaValueMax
+    const amigoInput = document.getElementById("amigo");
+    const amigo = amigoInput.value.trim();
 
-    if (amigo !== "") {
-        // Añadir al amigo a la lista
-        amigos.push(amigo);  // Añadir la variable amigo (no el array completo)
-        
-        // Actualizar la lista en la pantalla
-        actualizarListaAmigos();
-
-        // Limpiar el cuadro de texto
-        amigoInput.value = "";  // Limpiar el valor del input correctamente
-    } else {
-        // Mostrar una alerta si no se escribe un nombre
+    // Validar que no esté vacío
+    if (amigo === "") {
         alert("Por favor, ingresa un nombre válido.");
+        return;
     }
+
+    // Validar que el nombre no esté duplicado
+    if (amigos.includes(amigo)) {
+        alert(`"${amigo}" ya está en la lista.`);
+        amigoInput.value = "";
+        return;
+    }
+
+    // Añadir al amigo a la lista
+    amigos.push(amigo);
+    
+    // Actualizar la lista en la pantalla
+    actualizarListaAmigos();
+
+    // Limpiar el resultado del sorteo anterior si se añade un nuevo participante
+    const resultadoElemento = document.getElementById("resultado");
+    if (resultadoElemento) {
+        resultadoElemento.innerHTML = "";
+    }
+
+    // Limpiar el cuadro de texto y devolver el foco para seguir escribiendo con Enter
+    amigoInput.value = "";
+    amigoInput.focus();
 }
 
-// Función para actualizar la lista de amigos que se muestra
+// Función para actualizar la lista de amigos que se muestra en el HTML
 function actualizarListaAmigos() {
     const listaAmigos = document.getElementById("listaAmigos");
 
@@ -44,8 +58,9 @@ function actualizarListaAmigos() {
 
 // Función para sortear un amigo secreto
 function sortearAmigo() {
-    if (amigos.length === 0) {
-        alert("No hay amigos para sortear.");
+    // Validar que haya al menos 2 amigos para realizar el sorteo
+    if (amigos.length < 2) {
+        alert("Necesitas al menos 2 amigos en la lista para realizar el sorteo.");
         return;
     }
 
@@ -53,12 +68,19 @@ function sortearAmigo() {
     const indiceAleatorio = Math.floor(Math.random() * amigos.length);
     const amigoSorteado = amigos[indiceAleatorio];
 
-    // Mostrar el amigo sorteado (deberías tener un elemento con id "amigoSorteado")
-    const amigoSorteadoElemento = document.getElementById("amigoSorteado");
+    // Buscar el contenedor correcto ("resultado")
+    const resultadoElemento = document.getElementById("resultado");
 
-    if (amigoSorteadoElemento) {
-        amigoSorteadoElemento.textContent = "Amigo secreto sorteado: " + amigoSorteado;
+    if (resultadoElemento) {
+        // Inyectar el ganador en la lista con estilo
+        resultadoElemento.innerHTML = `<li><strong>¡El amigo secreto sorteado es: ${amigoSorteado}! 🎉</strong></li>`;
+        
+        // Limpiar la lista visual de participantes anteriores
+        const listaAmigos = document.getElementById("listaAmigos");
+        if (listaAmigos) {
+            listaAmigos.innerHTML = "";
+        }
     } else {
-        alert("No se encontró el elemento donde mostrar el amigo sorteado.");
+        alert("No se encontró el elemento contenedor con el ID 'resultado'.");
     }
 }

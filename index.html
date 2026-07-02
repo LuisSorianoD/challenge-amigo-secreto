@@ -19,15 +19,15 @@
         
         <section class="input-section">
             <h2 class="section-title">Digite el nombre de sus amigos</h2>
-            <div class="input-wrapper">
+            
+            <form class="input-wrapper" onsubmit="event.preventDefault(); agregarAmigo();">
                 <input type="text" id="amigo" class="input-name" placeholder="Escribe un nombre">
-                <button class="button-add" onclick="agregarAmigo()">Añadir</button>
-            </div>
+                <button type="submit" class="button-add">Añadir</button>
+            </form>
            
             <ul id="listaAmigos" class="name-list" aria-labelledby="listaAmigos" role="list"></ul>
+            
             <ul id="resultado" class="result-list" aria-live="polite"></ul>
-            <p id="amigoSorteado"></p>
-
 
             <div class="button-container">
                 <button class="button-draw" onclick="sortearAmigo()" aria-label="Sortear amigo secreto">
